@@ -34,6 +34,7 @@ use Symfony\Bundle\FrameworkBundle\Command\SecretsGenerateKeysCommand;
 use Symfony\Bundle\FrameworkBundle\Command\SecretsListCommand;
 use Symfony\Bundle\FrameworkBundle\Command\SecretsRemoveCommand;
 use Symfony\Bundle\FrameworkBundle\Command\SecretsSetCommand;
+use Symfony\Bundle\FrameworkBundle\Command\TranslationCacheWarmerCommand;
 use Symfony\Bundle\FrameworkBundle\Command\TranslationDebugCommand;
 use Symfony\Bundle\FrameworkBundle\Command\TranslationUpdateCommand;
 use Symfony\Bundle\FrameworkBundle\Command\WorkflowDumpCommand;
@@ -248,6 +249,14 @@ return static function (ContainerConfigurator $container) {
         ->set('console.command.serializer_debug', SerializerDebugCommand::class)
             ->args([
                 service('serializer.mapping.class_metadata_factory'),
+            ])
+            ->tag('console.command')
+
+        ->set('console.command.translation_cache_warmer', TranslationCacheWarmerCommand::class)
+            ->args([
+                service('translation.warmer'),
+                param('kernel.cache_dir'),
+                param('kernel.build_dir'),
             ])
             ->tag('console.command')
 

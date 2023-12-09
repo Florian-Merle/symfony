@@ -1422,6 +1422,7 @@ class FrameworkExtension extends Extension
     private function registerTranslatorConfiguration(array $config, ContainerBuilder $container, LoaderInterface $loader, string $defaultLocale, array $enabledLocales): void
     {
         if (!$this->readConfigEnabled('translator', $container, $config)) {
+            $container->removeDefinition('console.command.translation_cache_warmer');
             $container->removeDefinition('console.command.translation_debug');
             $container->removeDefinition('console.command.translation_extract');
             $container->removeDefinition('console.command.translation_pull');
