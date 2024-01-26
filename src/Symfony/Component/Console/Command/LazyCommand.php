@@ -15,6 +15,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
+use Symfony\Component\Console\Exception\BadMethodCallException;
 use Symfony\Component\Console\Helper\HelperInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -37,11 +38,19 @@ final class LazyCommand extends Command
         private ?bool $isEnabled = true,
     ) {
         $this->setName($name)
-            ->setAliases($aliases)
             ->setHidden($isHidden)
             ->setDescription($description);
 
+        parent::setAliases($aliases);
+
         $this->command = $commandFactory;
+    }
+
+    public function setAliases(iterable $aliases): static
+    {
+        throw new BadMethodCallException('Aliases can\'t be set on LazyCommand at runtime.');
+
+        return $this;
     }
 
     public function ignoreValidationErrors(): void
